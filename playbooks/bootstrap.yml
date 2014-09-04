@@ -1,0 +1,18 @@
+---
+- hosts: all
+  remote_user: root
+
+  vars_prompt:
+    host_name: "Set hostname:"
+    host_name_ip: "Set hostname ip:"
+  tasks:
+  - name: Set hosts line
+    lineinfile:
+      dest=/etc/hosts
+      line="{{ host_name }} {{ host_name_ip }}"
+  - name: Set hostname
+    hostname:
+      name={{ host_name }}
+  - name: Update timezone
+    shell: dpkg-reconfigure --frontend noninteractive tzdata
+
