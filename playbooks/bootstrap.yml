@@ -1,6 +1,6 @@
 ---
 - hosts: all
-  remote_user: root
+  sudo: yes
 
   vars_prompt:
     host_name: "Set hostname:"
@@ -56,3 +56,9 @@
       insertafter='  fi'
       line='fi'
 
+  - name: Include bash.bashrc.gentoops1
+    lineinfile: backup=yes state=present dest=/etc/bash.bashrc
+      line="source /etc/bash.bashrc.gentoops"
+
+  - name: File bash.bashrc.gentoops
+    copy: src=files/GentooPS dest=/etc/bash.bashrc.gentoops
