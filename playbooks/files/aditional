@@ -1,0 +1,17 @@
+set ai
+set hlsearch
+syntax on
+set sw=4 ts=4 st=4 et tw=80
+au FileType javascript,js :setl sw=2 ts=2 st=2
+au BufNewFile,BufRead *.mustache set filetype=html
+set history=5000
+
+" Show tabs
+set list!
+scriptencoding utf-8
+set encoding=utf-8
+setglobal fileencoding=utf-8
+set listchars=tab:»\
+hi SpecialKey ctermfg=7 guifg=gray
+hi NonText ctermfg=7 guifg=gray
+

@@ -3,8 +3,8 @@
   sudo: yes
 
   vars_prompt:
-    host_name: "Set hostname:"
-    host_name_ip: "Set hostname ip:"
+    host_name: "Set hostname"
+    host_name_ip: "Set hostname ip"
   tasks:
 
   - name: Set hosts line
@@ -74,3 +74,8 @@
   - name: File .bashrc
     copy: src=files/.bashrc dest=/root/.bashrc group=root owner=root mode=700
 
+  - name: Append additional file to vimrc
+    lineinfile: backup=yes state=present dest=/etc/vim/vimrc
+      line="source /etc/vim/aditional"
+
+  - copy: src=files/aditional dest=/etc/vim/aditional
