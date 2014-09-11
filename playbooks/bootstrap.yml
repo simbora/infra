@@ -62,3 +62,15 @@
 
   - name: File bash.bashrc.gentoops
     copy: src=files/GentooPS dest=/etc/bash.bashrc.gentoops
+
+  - name: Append default editor to environment
+    lineinfile: backup=yes state=present dest=/etc/environment
+      line="EDITOR=vim"
+
+  - name: Append rails environment to environment
+    lineinfile: backup=yes state=present dest=/etc/environment
+      line="RAILS_ENV=production"
+
+  - name: File .bashrc
+    copy: src=files/.bashrc dest=/root/.bashrc group=root owner=root mode=700
+
