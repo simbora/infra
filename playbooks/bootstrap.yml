@@ -3,8 +3,8 @@
   sudo: yes
 
   vars_prompt:
-    host_name: "Set hostname"
-    host_name_ip: "Set hostname ip"
+    host_name: "Set hostname:"
+    host_name_ip: "Set hostname ip:"
   tasks:
 
   - name: Set hosts line
@@ -79,3 +79,9 @@
       line="source /etc/vim/aditional"
 
   - copy: src=files/aditional dest=/etc/vim/aditional
+
+  - name: Ensure that root .ssh directory is created
+    file: state=directory path=/root/.ssh mode=700
+
+  - name: Save public key to authorized keys
+    get_url: url=https://github.com/rxaviers.keys dest=/root/.ssh/authorized_keys mode=700
