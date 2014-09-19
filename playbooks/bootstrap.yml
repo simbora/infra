@@ -1,0 +1,67 @@
+---
+- hosts: all
+  sudo: yes
+
+  tasks:
+
+  - name: Set hosts line
+    lineinfile:
+      dest=/etc/hosts
+      line="{{ ansible_ssh_host }} {{ inventory_hostname }}"
+
+  - name: Set hostname
+    hostname:
+      name={{ inventory_hostname }}
+
+  - name: Set timezone
+    lineinfile:
+      dest=/etc/timezone
+      line="America/Sao_Paulo"
+
+  - name: Update timezone
+    shell: dpkg-reconfigure --frontend noninteractive tzdata
+
+  - name: Turn bash completion on
+    lineinfile: backup=yes state=present dest='/etc/bash.bashrc'
+      regexp='{{ item.regexp }}' backrefs=yes line='{{ item.line }}'
+    with_items:
+      - { regexp: '^#if ! shopt -oq posix; then', line: 'if ! shopt -oq posix; then' }
+      - { regexp: '^#  if \[ -f /usr/share/bash-completion/bash_completion \]\; then', line: '  if [ -f /usr/share/bash-completion/bash_completion ]; then' }
+      - { regexp: '^#    . /usr/share/bash-completion/bash_completion', line: '    . /usr/share/bash-completion/bash_completion' }
+      - { regexp: '^#  elif \[ -f /etc/bash_completion \]\; then', line: '  elif [ -f /etc/bash_completion ]; then' }
+      - { regexp: '^#    . /etc/bash_completion', line: '    . /etc/bash_completion' }
+      - { regexp: '^#  fi', line: '  fi' }
+      - { regexp: '^#fi', line: 'fi' }
+
+  - name: Create bash.bashrc.d folder
+    file: state=directory path=/etc/bash.bashrc.d
+
+  - name: Include bash.bashrc.d directory
+    lineinfile: backup=yes state=present dest=/etc/bash.bashrc
+      line="source /etc/bash.bashrc.d/*"
+
+  - name: Gentoo ps
+    copy: src=files/GentooPS dest=/etc/bash.bashrc.d/gentoops
+
+  - name: Append default editor to environment
+    lineinfile: backup=yes state=present dest=/etc/environment
+      line="EDITOR=vim"
+
+  - name: Append rails environment to environment
+    lineinfile: backup=yes state=present dest=/etc/environment
+      line="RAILS_ENV=production"
+
+  - name: File .bashrc
+    copy: src=files/.bashrc dest=/root/.bashrc group=root owner=root mode=700
+
+  - name: Append additional file to vimrc
+    lineinfile: backup=yes state=present dest=/etc/vim/vimrc
+      line="source /etc/vim/vimrc.custom"
+
+  - copy: src=files/vimrc.custom dest=/etc/vim/vimrc.custom
+
+  - name: Ensure that root .ssh directory is created
+    file: state=directory path=/root/.ssh mode=700
+
+  - name: Save public key to authorized keys
+    get_url: url=https://github.com/rxaviers.keys dest=/root/.ssh/authorized_keys mode=700
