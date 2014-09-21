@@ -2,19 +2,16 @@
 - hosts: all
   sudo: yes
 
-  vars_prompt:
-    host_name: "Set hostname:"
-    host_name_ip: "Set hostname ip:"
   tasks:
 
   - name: Set hosts line
     lineinfile:
       dest=/etc/hosts
-      line="{{ host_name }} {{ host_name_ip }}"
+      line="{{ inventory_hostname }} {{ ansible_ssh_host }}"
 
   - name: Set hostname
     hostname:
-      name={{ host_name }}
+      name={{ inventory_hostname }}
 
   - name: Update timezone
     shell: dpkg-reconfigure --frontend noninteractive tzdata
