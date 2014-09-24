@@ -73,9 +73,9 @@
 
   - name: Append additional file to vimrc
     lineinfile: backup=yes state=present dest=/etc/vim/vimrc
-      line="source /etc/vim/aditional"
+      line="source /etc/vim/vimrc.custom"
 
-  - copy: src=files/aditional dest=/etc/vim/aditional
+  - copy: src=files/vimrc.custom dest=/etc/vim/vimrc.custom
 
   - name: Ensure that root .ssh directory is created
     file: state=directory path=/root/.ssh mode=700
