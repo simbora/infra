@@ -11,6 +11,6 @@ set list!
 scriptencoding utf-8
 set encoding=utf-8
 setglobal fileencoding=utf-8
-set listchars=tab:»\
+set listchars=tab:»\ 
 hi SpecialKey ctermfg=7 guifg=gray
 hi NonText ctermfg=7 guifg=gray
