@@ -53,12 +53,15 @@
       insertafter='  fi'
       line='fi'
 
-  - name: Include bash.bashrc.gentoops1
-    lineinfile: backup=yes state=present dest=/etc/bash.bashrc
-      line="source /etc/bash.bashrc.gentoops"
+  - name: Create bash.bashrc.d folder
+    file: state=directory path=/etc/bash.bashrc.d
 
-  - name: File bash.bashrc.gentoops
-    copy: src=files/GentooPS dest=/etc/bash.bashrc.gentoops
+  - name: Include bash.bashrc.d directory
+    lineinfile: backup=yes state=present dest=/etc/bash.bashrc
+      line="source /etc/bash.bashrc.d/*"
+
+  - name: File gentoops
+    copy: src=files/GentooPS dest=/etc/bash.bashrc.d/gentoops
 
   - name: Append default editor to environment
     lineinfile: backup=yes state=present dest=/etc/environment
