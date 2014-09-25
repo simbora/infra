@@ -16,42 +16,17 @@
   - name: Update timezone
     shell: dpkg-reconfigure --frontend noninteractive tzdata
 
-  - name: Uncomment first line for competition
-    lineinfile: backup=yes state=present dest=/etc/bash.bashrc
-      regexp='^#if ! shopt -oq posix; then' backrefs=yes
-      line='if ! shopt -oq posix; then'
-
-  - name: Uncomment second line for competition
-    lineinfile: backup=yes state=present dest=/etc/bash.bashrc
-      regexp='^#  if \[ -f /usr/share/bash-completion/bash_completion \]\; then' backrefs=yes
-      line='  if [ -f /usr/share/bash-completion/bash_completion ]; then'
-
-  - name: Uncomment third line for competition
-    lineinfile: backup=yes state=present dest=/etc/bash.bashrc
-      regexp='^#    . /usr/share/bash-completion/bash_completion' backrefs=yes
-      line='    . /usr/share/bash-completion/bash_completion'
-
-  - name: Uncomment fourth line for competition
-    lineinfile: backup=yes state=present dest=/etc/bash.bashrc
-      regexp='^#  elif \[ -f /etc/bash_completion \]\; then' backrefs=yes
-      line='  elif [ -f /etc/bash_completion ]; then'
-
-  - name: Uncomment fifth line for competition
-    lineinfile: backup=yes state=present dest=/etc/bash.bashrc
-      regexp='^#    . /etc/bash_completion' backrefs=yes
-      line='    . /etc/bash_completion'
-
-  - name: Uncomment sixst line for competition
-    lineinfile: backup=yes state=present dest=/etc/bash.bashrc
-      regexp='^#  fi' backrefs=yes
-      insertafter='    . /etc/bash_completion'
-      line='  fi'
-
-  - name: Uncomment seventh line for competition
-    lineinfile: backup=yes state=present dest=/etc/bash.bashrc
-      regexp='^#fi' backrefs=yes
-      insertafter='  fi'
-      line='fi'
+  - name: Uncomment lines for completion
+    lineinfile: backup=yes state=present dest='/etc/bash.bashrc'
+      regexp='{{ item.regexp }}' backrefs=yes line='{{ item.line }}'
+    with_items:
+      - { regexp: '^#if ! shopt -oq posix; then', line: 'if ! shopt -oq posix; then' }
+      - { regexp: '^#  if \[ -f /usr/share/bash-completion/bash_completion \]\; then', line: '  if [ -f /usr/share/bash-completion/bash_completion ]; then' }
+      - { regexp: '^#    . /usr/share/bash-completion/bash_completion', line: '    . /usr/share/bash-completion/bash_completion' }
+      - { regexp: '^#  elif \[ -f /etc/bash_completion \]\; then', line: '  elif [ -f /etc/bash_completion ]; then' }
+      - { regexp: '^#    . /etc/bash_completion', line: '    . /etc/bash_completion' }
+      - { regexp: '^#  fi', line: '  fi' }
+      - { regexp: '^#fi', line: 'fi' }
 
   - name: Create bash.bashrc.d folder
     file: state=directory path=/etc/bash.bashrc.d
