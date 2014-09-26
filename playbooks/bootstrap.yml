@@ -7,7 +7,7 @@
   - name: Set hosts line
     lineinfile:
       dest=/etc/hosts
-      line="{{ inventory_hostname }} {{ ansible_ssh_host }}"
+      line="{{ ansible_ssh_host }} {{ inventory_hostname }}"
 
   - name: Set hostname
     hostname:
