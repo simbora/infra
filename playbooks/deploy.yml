@@ -1,0 +1,13 @@
+---
+
+  - name: Create deploy user
+    user: name=deploy shell=/bin/bash home=/srv
+
+  - name: Lock user deploy
+    shell: usermod -L deploy
+
+  - name: Create srv folder
+    file: path=/srv owner=deploy state=directory
+
+  - name: Set profile for deploy user
+    copy: src=files/profile dest=/srv/.profile
