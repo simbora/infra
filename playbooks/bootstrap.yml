@@ -13,10 +13,15 @@
     hostname:
       name={{ inventory_hostname }}
 
+  - name: Set timezone
+    lineinfile:
+      dest=/etc/timezone
+      line="America/Sao_Paulo"
+
   - name: Update timezone
     shell: dpkg-reconfigure --frontend noninteractive tzdata
 
-  - name: Uncomment lines for completion
+  - name: Turn bash completion on
     lineinfile: backup=yes state=present dest='/etc/bash.bashrc'
       regexp='{{ item.regexp }}' backrefs=yes line='{{ item.line }}'
     with_items:
@@ -35,7 +40,7 @@
     lineinfile: backup=yes state=present dest=/etc/bash.bashrc
       line="source /etc/bash.bashrc.d/*"
 
-  - name: File gentoops
+  - name: Gentoo ps
     copy: src=files/GentooPS dest=/etc/bash.bashrc.d/gentoops
 
   - name: Append default editor to environment
