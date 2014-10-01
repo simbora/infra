@@ -14,3 +14,6 @@
 
   - name: Set profile environment for git user
     copy: src=files/profile dest=/srv/git/.profile owner=git group=git
+
+  - name: Install git-core package
+    apt: name=git-core update_cache=yes
