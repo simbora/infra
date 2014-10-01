@@ -9,5 +9,16 @@
   - name: Create srv folder
     file: path=/srv owner=deploy state=directory
 
-  - name: Set profile for deploy user
-    copy: src=files/profile dest=/srv/.profile
+  - name: Check if .profile exists
+    stat: path=/srv/.profile
+    register: profile
+
+  - name: Touch .profile if it doen't exist
+    file: path=/srv/.profile state=touch owner=deploy
+    when: not profile.stat.exists
+
+  - name: Add .profile color
+    lineinfile: backup=yes state=present dest='/srv/.profile' line='PS1="\[\033[01;35m\]\u@\h\[\033[01;34m\] \w \$\[\033[00m\] "'
+
+  - name: Add .profile ls alias for color
+    lineinfile: backup=yes state=present dest='/srv/.profile' line='alias ls="ls --color=auto"'
