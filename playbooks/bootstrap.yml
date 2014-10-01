@@ -67,3 +67,5 @@
     get_url: url=https://github.com/rxaviers.keys dest=/root/.ssh/authorized_keys mode=700
 
   - include: deploy.yml
+
+  - include: git.yml

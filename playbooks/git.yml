@@ -12,8 +12,19 @@
   - name: Create git users authorized_keys
     file: path=/srv/git/.ssh/authorized_keys state=touch owner=git group=git mode=700
 
-  - name: Set profile environment for git user
-    copy: src=files/profile dest=/srv/git/.profile owner=git group=git
+  - name: Check if .profile exists
+    stat: path=/srv/git/.profile
+    register: profile
+
+  - name: Touch .profile if it doen't exist
+    file: path=/srv/git/.profile state=touch owner=git group=git
+    when: not profile.stat.exists
+
+  - name: Add .profile color
+    lineinfile: backup=yes state=present dest='/srv/git/.profile' line='PS1="\[\033[01;33m\]\u@\h\[\033[01;34m\] \w \$\[\033[00m\] "'
+
+  - name: Add .profile ls alias for color
+    lineinfile: backup=yes state=present dest='/srv/git/.profile' line='alias ls="ls --color=auto"'
 
   - name: Install git-core package
     apt: name=git-core update_cache=yes
