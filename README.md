@@ -13,15 +13,14 @@ Steps to deploy a target machine:
  directory with the following content, where `host_name` is the target machine
  name, and `host_ip` is the target machine IP address.
 
-    [webservers]
-    <host_name1> ansible_ssh_host=<host_ip1>
-    <host_name2> ansible_ssh_host=<host_ip2>
-    ...
-
+      [webservers]
+      <host_name1> ansible_ssh_host=<host_ip1>
+      <host_name2> ansible_ssh_host=<host_ip2>
+      ...
 
  3. Deploy with the following command, where `--user` sets the login user and
  `--ask-pass` provides the password for such user (can be skipped if using ssh
  keys).
 
-    ansible-playbook -i hosts site.yml --user root --ask-pass
+      ansible-playbook -i hosts site.yml --user root --ask-pass
 
