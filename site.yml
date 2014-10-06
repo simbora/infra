@@ -1,0 +1,14 @@
+- name: apply common configuration to all nodes
+  hosts: all
+  remote_user: root
+
+  tasks:
+    - include: common/bootstrap.yml
+
+- name: configure and deploy the webservers and application code
+  hosts: webservers
+  remote_user: root
+
+  tasks:
+    - include: web/deploy.yml
+    - include: web/git.yml

@@ -1,0 +1,19 @@
+---
+
+- name: Create git group
+  group: name=git state=present
+
+- name: Create git user
+  user: name=git home=/srv/git group=git shell=/bin/bash
+
+- name: Create git users .ssh folder
+  file: path=/srv/git/.ssh state=directory owner=git group=git mode=700
+
+- name: Create git users authorized_keys
+  file: path=/srv/git/.ssh/authorized_keys state=touch owner=git group=git mode=700
+
+- name: Set profile environment for git user
+  copy: src=web/git/profile dest=/srv/git/.profile owner=git group=git
+
+- name: Install git-core package
+  apt: name=git-core update_cache=yes
