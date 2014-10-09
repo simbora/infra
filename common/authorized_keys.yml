@@ -1,0 +1,19 @@
+---
+
+- name: Create ssh folder for root user
+  file: path=/root/.ssh state=directory mode=700
+
+- name: Create keys folder
+  file: path=/tmp/keys state=directory
+
+- name: Download ssh authorized keys
+  get_url: url={{ item.url }} dest=/tmp/keys/
+  with_items:
+    - { url: 'https://github.com/rxaviers.keys', }
+    - { url: 'https://github.com/nikolavidovic.keys', }
+
+- name: Assemble authorized_keys
+  assemble: src=/tmp/keys dest=/root/.ssh/authorized_keys mode=0700
+
+- name: Remove folder with keys
+  file: path=/tmp/keys state=absent
