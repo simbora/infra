@@ -1,0 +1,27 @@
+---
+
+- name: Install postfix
+  apt: name=postfix state=installed
+
+- name: Ensure that postfix is started and enabled on boot
+  service: name=postfix state=started enabled=yes
+
+- name: Set mailname
+  copy: dest=/etc/mailname content={{ inventory_hostname }}
+
+- name: Configure postfix
+  lineinfile:
+    regexp='{{ item.regexp }}' backrefs=yes line='{{ item.line }}' dest=/etc/postfix/main.cf
+  with_items:
+    - { regexp: '^#myorigin = /etc/mailname', line: 'myorigin = /etc/mailname' }
+    - { regexp: '^myhostname', line: 'myhostname = {{ inventory_hostname }}' }
+    - { regexp: '^mydestination', line: 'mydestination = $myhostname, /etc/postfix/virtual/domains, localhost, localhost.localdomain, localhost' }
+  notify: Restart postfix
+
+- name: Remove lines from postfix
+  lineinfile:
+    regexp='{{ item.regexp }}' backrefs=yes dest=/etc/postfix/main.cf state=absent
+  with_items:
+    - { regexp: '^alias_maps', }
+    - { regexp: '^alias_database', }
+  notify: Restart postfix
