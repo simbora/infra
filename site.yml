@@ -8,6 +8,7 @@
 
   handlers:
     - include: common/postfix-service.yml
+
 - name: configure and deploy the webservers and application code
   hosts: webservers
   remote_user: root
