@@ -16,7 +16,7 @@
     - { regexp: '^#myorigin = /etc/mailname', line: 'myorigin = /etc/mailname' }
     - { regexp: '^myhostname', line: 'myhostname = {{ inventory_hostname }}' }
     - { regexp: '^mydestination', line: 'mydestination = $myhostname, /etc/postfix/virtual/domains, localhost, localhost.localdomain, localhost' }
-  notify: Reload postfix
+  notify: Restart postfix
 
 - name: Remove lines from postfix
   lineinfile:
