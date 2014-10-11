@@ -4,7 +4,6 @@
 
   tasks:
     - include: common/bootstrap.yml
-    - include: common/authorized_keys.yml
 
 - name: configure and deploy the webservers and application code
   hosts: webservers
