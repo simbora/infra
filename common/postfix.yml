@@ -25,3 +25,14 @@
     - { regexp: '^alias_maps', }
     - { regexp: '^alias_database', }
   notify: Reload postfix
+
+- name: Ensure that Postfix virtual folder exsists
+  file: path=/etc/postfix/virtual state=directory
+
+- name: Configure addresses for postfix
+  copy: src=common/postfix/addresses dest=/etc/postfix/virtual/addresses
+  notify: Postmap addresses
+
+- name: Configure domains for postfix
+  copy: src=common/postfix/domains dest=/etc/postfix/virtual/domains
+  notify: Reload postfix
