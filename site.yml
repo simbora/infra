@@ -7,7 +7,7 @@
     - include: common/postfix.yml
 
   handlers:
-    - include: common/postfix-service.yml
+    - include: common/postfix-handlers.yml
 
 - name: configure and deploy the webservers and application code
   hosts: webservers
