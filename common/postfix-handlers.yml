@@ -1,7 +1,7 @@
 ---
 
 - name: Reload postfix
-  action: service name=postfix state=reloaded
+  command: /usr/sbin/postfix reload
 
 - name: Postmap addresses
   command: postmap /etc/postfix/virtual/addresses
