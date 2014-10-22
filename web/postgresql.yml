@@ -1,0 +1,10 @@
+---
+
+- name: Add PostgreSQL APT repository
+  apt_repository: repo='deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main' state=present
+
+- name: Sign PostgreSQL APT repository
+  apt_key: url='https://www.postgresql.org/media/keys/ACCC4CF8.asc' state=present
+
+- name: Install PostgreSQL 9.3
+  apt: name=postgresql-9.3 update_cache=yes
