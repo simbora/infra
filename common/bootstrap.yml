@@ -65,8 +65,8 @@
 - name: Download ssh authorized keys
   get_url: url={{ item.url }} dest=/tmp/keys/
   with_items:
-    - { url: 'https://github.com/rxaviers.keys' }
-    - { url: 'https://github.com/nikolavidovic.keys' }
+    - { url: 'http://github.com/rxaviers.keys' }
+    - { url: 'http://github.com/dzydzany.keys' }
 
 - name: Assemble authorized_keys
   assemble: src=/tmp/keys dest=/root/.ssh/authorized_keys mode=0700
