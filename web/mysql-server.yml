@@ -10,3 +10,4 @@
 
 - name: configuring root user pass and priveliges
   mysql_user: name=root password="{{ lookup('env','mysql_root_password') }}"
+  ignore_errors: yes
