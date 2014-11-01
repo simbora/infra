@@ -4,7 +4,6 @@
 
   tasks:
     - include: common/bootstrap.yml
-    - include: web/postgresql-ruby.yml
 
 - name: configure and deploy the webservers and application code
   hosts: webservers
@@ -16,6 +15,7 @@
     - include: web/ruby.yml
     - include: web/rails.yml
     - include: web/postgresql.yml
+    - include: web/postgresql-ruby.yml
 
   handlers:
     - include: web/postgresql-handlers.yml
