@@ -1,0 +1,24 @@
+---
+
+- name: Restart mysql
+  action: service name=mysql state=restarted
+
+- name: Move mysql data folder
+  command: echo "Starting to move MySQL data folder"
+  notify: Stop mysql service
+
+- name: Stop mysql service
+  action: service name=mysql state=stopped
+  notify: Move mysql data
+
+- name: Move mysql data
+  command: mv /var/lib/mysql /data/
+  notify: Start mysql service
+
+- name: Start mysql service
+  service: name=mysql state=started
+
+- name: Restart apparmor service
+  service: name=mysql state=stopped
+  service: name=apparmor state=restarted
+  notify: Start mysql service

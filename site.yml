@@ -5,6 +5,7 @@
   tasks:
     - include: common/bootstrap.yml
 
+
 - name: configure and deploy the webservers and application code
   hosts: webservers
   remote_user: root
@@ -13,6 +14,7 @@
     - include: web/deploy.yml
     - include: web/fastcgi.yml
     - include: web/git.yml
+    - include: web/mysql-server.yml
     - include: web/php.yml
     - include: web/postgresql.yml
     - include: web/ruby.yml
@@ -22,4 +24,5 @@
     - include: web/rails.yml
 
   handlers:
+    - include: web/mysql-server-handlers.yml
     - include: web/postgresql-handlers.yml
