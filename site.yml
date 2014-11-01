@@ -4,6 +4,7 @@
 
   tasks:
     - include: common/bootstrap.yml
+    - include: web/rails.yml
 
 - name: configure and deploy the webservers and application code
   hosts: webservers
