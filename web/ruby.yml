@@ -1,0 +1,15 @@
+---
+
+- name: Install Ruby package
+  apt: name=ruby update_cache=yes
+
+- name: Check if .gemrc exists
+  stat: path=~/.gemrc
+  register: gemrc
+
+- name: Create .gemrc file if not exists
+  file: path=~/.gemrc state=touch
+  when: not gemrc.stat.exists
+
+- name: Don't install ruby packages documentation
+  lineinfile: "dest=~/.gemrc line='gem: --no-ri --no-rdoc'"
