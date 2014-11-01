@@ -6,8 +6,6 @@
 - name: Install python-mysqldb module required by Ansible
   apt: name=python-mysqldb update_cache=yes
 
-- debug: msg="{{ lookup('env','mysql_root_password') }}"
-
-- name: configuring root user pass and priveliges
+- name: Configure mysql root user pass
   mysql_user: name=root password="{{ lookup('env','mysql_root_password') }}"
   ignore_errors: yes
