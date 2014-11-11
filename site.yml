@@ -13,6 +13,7 @@
     - include: web/deploy.yml
     - include: web/git.yml
     - include: web/ruby.yml
+    - include: web/php.yml
     - include: web/postgresql.yml
     - include: web/postgresql-ruby.yml
     - include: web/rails.yml
