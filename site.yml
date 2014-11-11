@@ -4,6 +4,7 @@
 
   tasks:
     - include: common/bootstrap.yml
+    - include: web/postgresql.yml
     - include: web/postgresql-ruby.yml
     - include: web/ruby.yml
 
