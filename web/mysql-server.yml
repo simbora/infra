@@ -18,6 +18,10 @@
     regexp='^datadir'
   notify: Move mysql data folder
 
+- name: Test if apparmor exists
+  stat: path=/etc/init.d/apparmor
+  register: apparmor_installed
+
 - name: Fix apparmor configuration for mysql
   lineinfile:
     regexp='{{ item.apparmor }}' backrefs=yes line='{{ item.apparmor_line }}' dest=/etc/apparmor.d/usr.sbin.mysqld
@@ -26,3 +30,4 @@
     - { apparmor: '^  /var/lib/mysql/\*\* rwk\,', apparmor_line: '  /data/mysql/** rwk,' }
 
   notify: Restart apparmor service
+  when: apparmor_installed.stat.exists
