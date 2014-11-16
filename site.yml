@@ -15,6 +15,7 @@
     - include: web/fastcgi.yml
     - include: web/git.yml
     - include: web/mysql.yml
+    - include: web/nginx-passenger.yml
     - include: web/php.yml
     - include: web/postgresql.yml
     - include: web/ruby.yml
@@ -25,4 +26,5 @@
 
   handlers:
     - include: web/mysql-handlers.yml
+    - include: web/nginx-passenger-handlers.yml
     - include: web/postgresql-handlers.yml
