@@ -14,3 +14,6 @@
     - include: web/git.yml
     - include: web/ruby.yml
     - include: web/nginx-passenger.yml
+
+  handlers:
+    - include: web/nginx-passenger-handlers.yml

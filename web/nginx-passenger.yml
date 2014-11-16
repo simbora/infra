@@ -14,3 +14,22 @@
   with_items:
     - nginx-extras
     - passenger
+
+- name: Change Nginx user
+  lineinfile: regexp='^user' line='user deploy;'
+    dest=/etc/nginx/nginx.conf
+  notify: Restart Nginx
+
+- name: Configure Nginx gzip and enable passenger
+  lineinfile: backup=yes state=present dest='/etc/nginx/nginx.conf'
+    regexp='{{ item.regexp }}' backrefs=yes line='{{ item.line }}'
+  with_items:
+    - { regexp: '# gzip_vary', line: '        gzip_vary on;' }
+    - { regexp: '# gzip_proxied', line: '        gzip_proxied any;' }
+    - { regexp: '# gzip_comp_level', line: '        gzip_comp_level 6;' }
+    - { regexp: '# gzip_buffers', line: '        gzip_buffers 16 8k;' }
+    - { regexp: '# gzip_http_version', line: '        gzip_http_version 1.1;' }
+    - { regexp: '# gzip_types', line: '        gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript;' }
+    - { regexp: '# passenger_root', line: '        passenger_root /usr/lib/ruby/vendor_ruby/phusion_passenger/locations.ini;' }
+    - { regexp: '# passenger_ruby', line: '        passenger_ruby /usr/bin/ruby;' }
+  notify: Restart Nginx
