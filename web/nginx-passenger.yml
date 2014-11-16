@@ -1,0 +1,16 @@
+---
+
+- name: Add Passenger apt repo key
+  apt_key: keyserver=keyserver.ubuntu.com id=561F9B9CAC40B2F7
+
+- name: Add Passenger repo to apt
+  copy: src=web/nginx-passenger/nginx-passenger.list
+    dest=/etc/apt/sources.list.d/nginx-passenger.list
+    mode=0600
+  when: ansible_distribution_release == "trusty"
+
+- name: Install Nginx and passenger packages
+  apt: name={{ item }} update_cache=yes
+  with_items:
+    - nginx-extras
+    - passenger
