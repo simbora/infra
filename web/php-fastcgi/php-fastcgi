@@ -3,8 +3,8 @@
 FASTCGI_USER=deploy
 FASTCGI_GROUP=deploy
 ADDRESS=127.0.0.1
-PORT=9000 
-PIDFILE=/var/run/php-fastcgi/php-fastcgi.pid
+PORT=9000
+PIDFILE=/var/run/php-fastcgi.pid
 CHILDREN=6
 PHP5=/usr/bin/php5-cgi
 
