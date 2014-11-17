@@ -14,3 +14,7 @@
     - include: web/git.yml
     - include: web/ruby.yml
     - include: web/rails.yml
+    - include: web/postgresql.yml
+
+  handlers:
+    - include: web/postgresql-handlers.yml

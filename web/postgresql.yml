@@ -8,3 +8,9 @@
 
 - name: Install PostgreSQL 9.3
   apt: name=postgresql-9.3 update_cache=yes
+
+- name: Fix postgresql permissions in pg_hba.conf
+  lineinfile: dest=/etc/postgresql/9.3/main/pg_hba.conf backrefs=yes
+    regexp='^local   all             all                                     peer'
+    line='local   all             all                                     md5'
+  notify: Restart PostgreSQL
