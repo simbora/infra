@@ -33,3 +33,13 @@
     - { regexp: '# passenger_root', line: '        passenger_root /usr/lib/ruby/vendor_ruby/phusion_passenger/locations.ini;' }
     - { regexp: '# passenger_ruby', line: '        passenger_ruby /usr/bin/ruby;' }
   notify: Restart Nginx
+
+- name: Check if Map variable for ssl connection exists
+  shell: cat /etc/nginx/nginx.conf
+  register: nginx_conf_content
+
+- name: Map variable for ssl conection
+  lineinfile: "backup=yes state=present dest=/etc/nginx/nginx.conf
+    insertafter='http {' line='        # Detect when HTTPS is used\n        map $scheme $fastcgi_https {\n            default off;\n            https on;\n        }'"
+  when: '"Detect when HTTPS is used" not in nginx_conf_content.stdout'
+  notify: Restart Nginx
