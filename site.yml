@@ -13,3 +13,4 @@
   tasks:
     - include: web/deploy.yml
     - include: web/git.yml
+    - include: web/ruby.yml
