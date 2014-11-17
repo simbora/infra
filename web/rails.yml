@@ -4,4 +4,4 @@
   apt: name=gem update_cache=yes
 
 - name: Install rails
-  gem: name=rails state=present
+  gem: name=rails state=present user_install=no
