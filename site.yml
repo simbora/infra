@@ -4,6 +4,10 @@
 
   tasks:
     - include: common/bootstrap.yml
+    - include: web/mysql-server.yml
+
+  handlers:
+    - include: web/mysql-server-handlers.yml
 
 - name: configure and deploy the webservers and application code
   hosts: webservers

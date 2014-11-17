@@ -1,0 +1,33 @@
+---
+
+- name: Install mysql-server package
+  apt: name=mysql-server update_cache=yes
+
+- name: Install python-mysqldb module required by Ansible
+  apt: name=python-mysqldb update_cache=yes
+
+- name: Configure mysql root user pass
+  mysql_user: name=root password="{{ lookup('env','mysql_root_password') }}"
+  ignore_errors: yes
+
+- name: Create /data/mysql folder
+  file: path=/data/mysql state=directory owner=mysql group=mysql
+
+- name: Change mysql data folder
+  lineinfile: dest=/etc/mysql/my.cnf line='datadir = /data/mysql'
+    regexp='^datadir'
+  notify: Move mysql data folder
+
+- name: Test if apparmor exists
+  stat: path=/etc/init.d/apparmor
+  register: apparmor_installed
+
+- name: Fix apparmor configuration for mysql
+  lineinfile:
+    regexp='{{ item.apparmor }}' backrefs=yes line='{{ item.apparmor_line }}' dest=/etc/apparmor.d/usr.sbin.mysqld
+  with_items:
+    - { apparmor: '^  /var/lib/mysql/ r\,', apparmor_line: '  /data/mysql/ r,' }
+    - { apparmor: '^  /var/lib/mysql/\*\* rwk\,', apparmor_line: '  /data/mysql/** rwk,' }
+
+  notify: Restart apparmor service
+  when: apparmor_installed.stat.exists
