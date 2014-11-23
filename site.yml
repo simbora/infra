@@ -16,6 +16,7 @@
     - include: web/git.yml
     - include: web/mysql.yml
     - include: web/nginx-passenger.yml
+    - include: web/nodejs.yml
     - include: web/php.yml
     - include: web/postgresql.yml
     - include: web/ruby.yml
