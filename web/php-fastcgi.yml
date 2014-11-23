@@ -1,12 +1,12 @@
 ---
 
-- name: Create init.d script for php-fastcgi
+- name: Create script for php-fastcgi
   copy: src=web/php-fastcgi/php-fastcgi
-    dest=/etc/init.d/php-fastcgi mode=0751
+    dest=/usr/local/bin/php-fastcgi mode=0751
 
 - name: Create php-fastcgi configuration
   copy: src=web/php-fastcgi/php-fastcgi.conf
-    dest=/etc/init/php-fastcgi
+    dest=/etc/init/php-fastcgi.conf
 
 - name: Ensure that php-fastcgi service is enabled and running
   service: name=php-fastcgi state=running enabled=yes
