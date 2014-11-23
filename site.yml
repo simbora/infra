@@ -14,3 +14,4 @@
     - include: web/git.yml
     - include: web/ruby.yml
     - include: web/rails.yml
+    - include: web/nodejs.yml
