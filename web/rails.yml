@@ -1,5 +1,11 @@
 ---
 
+- name: Install ruby-dev and build-essential packages
+  apt: name={{ item }} update_cache=yes
+  with_items:
+    - ruby-dev
+    - build-essential
+
 - name: Install gem package
   apt: name=gem update_cache=yes
 
