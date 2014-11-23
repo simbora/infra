@@ -75,5 +75,10 @@
 - name: Remove folder with keys
   file: path=/tmp/keys state=absent
 
+- name: Upgrade all installed packages prior to first run
+  shell: apt-get update && apt-get upgrade -y && touch /root/.aptupgraded
+  args:
+    creates: /root/.aptupgraded
+
 - name: Install python-pycurl needed for apt-key Ansible features
   apt: name=python-pycurl update_cache=yes
