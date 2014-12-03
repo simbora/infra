@@ -24,6 +24,8 @@ Steps to deploy a target machine:
 
       ansible-playbook -i hosts site.yml --user root --ask-pass
 
+ Mysql: Use `MYSQL_ROOT_PASSWD` environment variable to set the root password.
+
  OBS: make sure to unset some local variables that could be sent to remote
  machine and fail some of the installations (e.g., Create PostgreSQL cluster).
 
