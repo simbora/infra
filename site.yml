@@ -17,6 +17,7 @@
     - include: web/postgresql.yml
     - include: web/ruby.yml
 
+    - include: web/php-fastcgi.yml
     - include: web/postgresql-ruby.yml
     - include: web/rails.yml
 
