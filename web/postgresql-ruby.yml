@@ -1,0 +1,16 @@
+---
+
+- name: Install ruby-dev and build-essential packages
+  apt: name={{ item }} update_cache=yes
+  with_items:
+    - ruby-dev
+    - build-essential
+
+- name: Install ruby-pg package
+  apt: name=ruby-pg update_cache=yes
+
+- name: Install libpq5 and libpq-dev packages
+  apt: name={{ item }} update_cache=yes
+  with_items:
+    - libpq5
+    - libpq-dev
