@@ -24,3 +24,7 @@ Steps to deploy a target machine:
 
       ansible-playbook -i hosts site.yml --user root --ask-pass
 
+ OBS: make sure to unset some local variables that could be sent to remote
+ machine and fail some of the installations (e.g., Create PostgreSQL cluster).
+
+      unset LANGUAGE LC_ALL LC_TIME LC_MONETARY LC_CTYPE LC_ADDRESS LC_TELEPHONE LC_NAME LC_MEASUREMENT LC_IDENTIFICATION LC_NUMERIC LC_PAPER LANG
