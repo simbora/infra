@@ -1,0 +1,21 @@
+---
+
+- name: Add PostgreSQL APT repository
+  apt_repository: repo='deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main' state=present
+
+- name: Sign PostgreSQL APT repository
+  apt_key: url='https://www.postgresql.org/media/keys/ACCC4CF8.asc' state=present
+
+- name: Install PostgreSQL 9.3
+  apt: name=postgresql-9.3 update_cache=yes
+
+- name: Create PostgreSQL postgres cluster
+  shell: pg_createcluster 9.3 postgres -d /data/postgres
+  args:
+    creates: /data/postgres
+
+- name: Fix postgresql permissions in pg_hba.conf
+  lineinfile: dest=/etc/postgresql/9.3/postgres/pg_hba.conf backrefs=yes
+    regexp='^local   all             all                                     peer'
+    line='local   all             all                                     md5'
+  notify: Restart PostgreSQL

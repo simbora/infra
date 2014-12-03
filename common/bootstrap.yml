@@ -74,3 +74,6 @@
 
 - name: Remove folder with keys
   file: path=/tmp/keys state=absent
+
+- name: Install python-pycurl needed for apt-key Ansible features
+  apt: name=python-pycurl update_cache=yes
