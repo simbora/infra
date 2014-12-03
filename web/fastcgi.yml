@@ -1,0 +1,7 @@
+---
+
+- name: Install fastcgi packages
+  apt: name={{ item }} update_cache=yes
+  with_items:
+    - spawn-fcgi
+    - psmisc
