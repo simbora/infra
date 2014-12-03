@@ -7,7 +7,7 @@
   apt: name=python-mysqldb update_cache=yes
 
 - name: Configure mysql root user pass
-  mysql_user: name=root password="{{ lookup('env','mysql_root_password') }}"
+  mysql_user: name=root password="{{ lookup('env','mysql_root_passwd') }}"
   ignore_errors: yes
 
 - name: Create /data/mysql folder
