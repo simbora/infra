@@ -1,0 +1,4 @@
+---
+
+- name: Install php-pear package
+  apt: name=php-pear update_cache=yes
