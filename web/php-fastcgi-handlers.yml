@@ -1,0 +1,4 @@
+---
+
+- name: Restart php-fastcgi service
+  service: name=php-fastcgi state=restarted

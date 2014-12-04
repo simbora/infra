@@ -1,0 +1,28 @@
+---
+
+- name: Install libgpgme11 and libgpgme11-dev
+  apt: name={{ item }} update_cache=yes
+  with_items:
+    - libgpgme11
+    - libgpgme11-dev
+
+- name: Install php-gnupg via pecl
+  shell: pecl install gnupg && touch /root/.ansible/php-gnupg-created
+  args:
+    creates: /root/.ansible/php-gnupg-created
+
+- name: Create php-gnupg module
+  lineinfile: dest=/etc/php5/mods-available/gnupg.ini
+    create=yes
+    line='extension=gnupg.so'
+    state=present
+
+- name: Create php-gnupg module symbolic links on /etc/php5/{cgi,cli}/conf.d/
+  file: src=/etc/php5/mods-available/gnupg.ini
+    dest=/etc/php5/{{ item }}/conf.d/gnupg.ini
+    state=link
+  with_items:
+    - cgi
+    - cli
+
+  notify: Restart php-fastcgi service
