@@ -25,6 +25,7 @@
     - include: web/php-pear.yml
     - include: web/postgresql-ruby.yml
     - include: web/rails.yml
+    - include: web/php-mysql.yml
 
     - include: web/php-gnupg.yml
 
@@ -33,3 +34,4 @@
     - include: web/nginx-passenger-handlers.yml
     - include: web/php-fastcgi-handlers.yml
     - include: web/postgresql-handlers.yml
+    - include: web/php-mysql-handlers.yml
