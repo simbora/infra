@@ -35,9 +35,9 @@
   file: path=/etc/postfix/virtual state=directory
 
 - name: Configure addresses for postfix
-  copy: src=common/postfix/addresses dest=/etc/postfix/virtual/addresses
+  copy: src=web/postfix/addresses dest=/etc/postfix/virtual/addresses
   notify: Postmap addresses
 
 - name: Configure domains for postfix
-  copy: src=common/postfix/domains dest=/etc/postfix/virtual/domains
+  copy: src=web/postfix/domains dest=/etc/postfix/virtual/domains
   notify: Reload postfix
