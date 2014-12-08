@@ -4,10 +4,6 @@
 
   tasks:
     - include: common/bootstrap.yml
-    - include: common/postfix.yml
-
-  handlers:
-    - include: common/postfix-handlers.yml
 
 - name: configure and deploy the webservers and application code
   hosts: webservers
@@ -23,6 +19,7 @@
     - include: web/php.yml
     - include: web/postgresql.yml
     - include: web/ruby.yml
+    - include: common/postfix.yml
 
     - include: web/php-fastcgi.yml
     - include: web/php-pear.yml
@@ -36,3 +33,4 @@
     - include: web/nginx-passenger-handlers.yml
     - include: web/php-fastcgi-handlers.yml
     - include: web/postgresql-handlers.yml
+    - include: common/postfix-handlers.yml
