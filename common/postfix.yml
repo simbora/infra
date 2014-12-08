@@ -26,6 +26,11 @@
     - { regexp: '^alias_database', }
   notify: Reload postfix
 
+- name: Add virtual_alias_maps line
+  lineinfile: line='virtual_alias_maps = hash:/etc/postfix/virtual/addresses'
+    dest=/etc/postfix/main.cf
+  notify: Reload postfix
+
 - name: Ensure that Postfix virtual folder exsists
   file: path=/etc/postfix/virtual state=directory
 
