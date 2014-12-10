@@ -1,0 +1,43 @@
+---
+
+- name: Install postfix
+  apt: name=postfix state=installed
+
+- name: Ensure that postfix is started and enabled on boot
+  service: name=postfix state=started enabled=yes
+
+- name: Set mailname
+  copy: dest=/etc/mailname content={{ inventory_hostname }}
+
+- name: Configure postfix
+  lineinfile:
+    regexp='{{ item.regexp }}' backrefs=yes line='{{ item.line }}' dest=/etc/postfix/main.cf
+  with_items:
+    - { regexp: '^#myorigin = /etc/mailname', line: 'myorigin = /etc/mailname' }
+    - { regexp: '^myhostname', line: 'myhostname = {{ inventory_hostname }}' }
+    - { regexp: '^mydestination', line: 'mydestination = $myhostname, /etc/postfix/virtual/domains, localhost, localhost.localdomain, localhost' }
+  notify: Restart postfix
+
+- name: Remove lines from postfix
+  lineinfile:
+    regexp='{{ item.regexp }}' backrefs=yes dest=/etc/postfix/main.cf state=absent
+  with_items:
+    - { regexp: '^alias_maps', }
+    - { regexp: '^alias_database', }
+  notify: Reload postfix
+
+- name: Add virtual_alias_maps line
+  lineinfile: line='virtual_alias_maps = hash:/etc/postfix/virtual/addresses'
+    dest=/etc/postfix/main.cf
+  notify: Reload postfix
+
+- name: Ensure that Postfix virtual folder exsists
+  file: path=/etc/postfix/virtual state=directory
+
+- name: Configure addresses for postfix
+  copy: src=web/postfix/addresses dest=/etc/postfix/virtual/addresses
+  notify: Postmap addresses
+
+- name: Configure domains for postfix
+  copy: src=web/postfix/domains dest=/etc/postfix/virtual/domains
+  notify: Reload postfix
