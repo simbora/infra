@@ -1,0 +1,10 @@
+---
+
+- name: Restart PHP Fastcgi for php-mysql
+  stat: path=/etc/init.d/php-fastcgi.conf
+  register: php_fastcgi
+  notify: Restart php_fastcgi if exists
+
+- name: Restart php_fastcgi if exists
+  service: name=php-fastcgi state=restarted
+  when: php_fastcgi.stat.exists
