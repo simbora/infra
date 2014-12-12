@@ -22,8 +22,8 @@
   lineinfile:
     regexp='{{ item.regexp }}' backrefs=yes dest=/etc/postfix/main.cf state=absent
   with_items:
-    - { regexp: '^alias_maps', }
-    - { regexp: '^alias_database', }
+    - { regexp: '^alias_maps' }
+    - { regexp: '^alias_database' }
   notify: Reload postfix
 
 - name: Add virtual_alias_maps line
