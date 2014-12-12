@@ -21,6 +21,7 @@
     - include: web/postfix.yml
     - include: web/postgresql.yml
     - include: web/ruby.yml
+    - include: web/redis.yml
 
     - include: web/php-fastcgi.yml
     - include: web/php-pear.yml
@@ -36,3 +37,4 @@
     - include: web/php-fastcgi-handlers.yml
     - include: web/postfix-handlers.yml
     - include: web/postgresql-handlers.yml
+    - include: web/redis-handlers.yml
