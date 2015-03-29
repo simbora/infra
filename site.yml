@@ -27,6 +27,7 @@
     - include: web/postgresql-ruby.yml
     - include: web/rails.yml
 
+    - include: web/php-mysql.yml
     - include: web/php-gnupg.yml
 
   handlers:
