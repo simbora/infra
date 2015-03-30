@@ -11,7 +11,7 @@
 
 - name: Configure redis to use /data/redis as data folder
   lineinfile: dest=/etc/redis/redis.conf
-    regexp=^dir line='dir=/data/redis' backrefs=yes
+    regexp=^dir line='dir /data/redis' backrefs=yes
   notify: Restart redis
 
 - name: Enable redis server on start and ensure that is running

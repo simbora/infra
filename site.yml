@@ -20,8 +20,8 @@
     - include: web/php.yml
     - include: web/postfix.yml
     - include: web/postgresql.yml
-    - include: web/ruby.yml
     - include: web/redis.yml
+    - include: web/ruby.yml
 
     - include: web/php-fastcgi.yml
     - include: web/php-pear.yml
