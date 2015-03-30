@@ -1,0 +1,98 @@
+---
+
+# Based on:
+# - https://github.com/pmbauer/ansible-tarsnap
+# - https://github.com/pdebruic/ansible-tarsnap
+
+- name: Install build libraries and tools for compiling tarsnap
+  apt: name={{ item }} state=installed update_cache=yes
+  with_items:
+    - build-essential
+    - ext2fs-dev
+    - zlib1g-dev
+    - libssl-dev
+
+- name: Check if tarsnap {{ tarsnap_version }} is installed
+  shell: tarsnap --version | grep {{ tarsnap_version }} --color=never
+  register: tarnsap_installed
+  changed_when: "tarnsap_installed.stderr != ''"
+  ignore_errors: yes
+  sudo: yes
+  sudo_user: deploy
+
+- name: Download the current tarsnap code signing key
+  when: tarnsap_installed|failed
+  get_url:
+    url=https://www.tarsnap.com/tarsnap-signing-key.asc
+    dest="/tmp/tarsnap-signing-key.asc"
+  sudo: yes
+  sudo_user: deploy
+
+- name: Add the tarsnap code signing key to your list of keys
+  when: tarnsap_installed|failed
+  command: "gpg --import /tmp/tarsnap-signing-key.asc"
+  sudo: yes
+  sudo_user: deploy
+
+- name: Download tarsnap SHA file
+  when: tarnsap_installed|failed
+  get_url:
+    url="https://www.tarsnap.com/download/tarsnap-sigs-{{ tarsnap_version }}.asc"
+    dest="/tmp/tarsnap-sigs-{{ tarsnap_version }}.asc"
+  sudo: yes
+  sudo_user: deploy
+
+- name: Get the SHA256sum for this tarsnap release
+  when: tarnsap_installed|failed
+  shell: >
+    gpgResult=`gpg --decrypt tarsnap-sigs-{{ tarsnap_version }}.asc 2>/dev/null`;
+    echo ${gpgResult#*=};
+  args:
+    executable: /bin/bash
+    chdir: /tmp
+  register: tarsnap_sha
+  sudo: yes
+  sudo_user: deploy
+
+- name: Download tarsnap source
+  when: tarnsap_installed|failed
+  get_url:
+    url="https://www.tarsnap.com/download/tarsnap-autoconf-{{ tarsnap_version }}.tgz"
+    dest="/tmp/tarsnap-autoconf-{{ tarsnap_version }}.tgz"
+    sha256sum={{ tarsnap_sha.stdout_lines[0] }}
+  sudo: yes
+  sudo_user: deploy
+
+- name: Decompress tarsnap source
+  when: tarnsap_installed|failed
+  command: tar xzf /tmp/tarsnap-autoconf-{{ tarsnap_version }}.tgz chdir=/tmp creates=/tmp/tarsnap-autoconf-{{ tarsnap_version }}/COPYING
+  sudo: yes
+  sudo_user: deploy
+
+- name: Configure tarsnap for local build
+  when: tarnsap_installed|failed
+  command: ./configure chdir=/tmp/tarsnap-autoconf-{{ tarsnap_version }} creates=/tmp/tarsnap-autoconf-{{ tarsnap_version }}/Makefile
+  sudo: yes
+  sudo_user: deploy
+
+- name: Build tarsnap
+  when: tarnsap_installed|failed
+  command: make all chdir=/tmp/tarsnap-autoconf-{{ tarsnap_version }} creates=/tmp/tarsnap-autoconf-{{ tarsnap_version }}/tarsnap
+  sudo: yes
+  sudo_user: deploy
+
+- name: Install tarsnap
+  command: make install chdir=/tmp/tarsnap-autoconf-{{ tarsnap_version }} creates=/usr/local/bin/tarsnap
+
+- name: Copy tarsnap configuration file
+  copy: src=web/tarsnap/tarsnaprc dest={{ item.dest }} owner={{ item.user }} group={{ item.user }}
+  with_items:
+    - { dest: "/srv/.tarsnaprc", user: "deploy" }
+    - { dest: "/srv/git/.tarsnaprc", user: "git" }
+
+- name: Create /srv/.tarsnap directory
+  file: path=/srv/.tarsnap owner=deploy group=deploy state=directory
+
+- name: Copy tarsnap key file
+  copy: src=web/tarsnap/tarsnap.key dest=/srv/.tarsnap/tarsnap.key owner=deploy group=deploy
+

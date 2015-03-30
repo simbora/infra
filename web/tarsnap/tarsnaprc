@@ -1,0 +1,3 @@
+keyfile /srv/.tarsnap/tarsnap.key
+cachedir /tmp/tarsnap-cache
+humanize-numbers
