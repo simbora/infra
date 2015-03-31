@@ -1,19 +1,22 @@
 ---
 
-- name: Create git group
-  group: name=git state=present
+- name: Create srv group
+  group: name=srv state=present
 
 - name: Create git user
-  user: name=git home=/srv/git group=git shell=/bin/bash
+  user: name=git home=/srv/git group=srv shell=/bin/bash
+
+- name: Set /srv/git ownership and permissions
+  file: path=/srv/git state=directory owner=git group=srv
 
 - name: Create git users .ssh folder
-  file: path=/srv/git/.ssh state=directory owner=git group=git mode=700
+  file: path=/srv/git/.ssh state=directory owner=git group=srv mode=700
 
 - name: Create git users authorized_keys
-  file: path=/srv/git/.ssh/authorized_keys state=touch owner=git group=git mode=700
+  file: path=/srv/git/.ssh/authorized_keys state=touch owner=git group=srv mode=700
 
 - name: Set profile environment for git user
-  copy: src=web/git/profile dest=/srv/git/.profile owner=git group=git
+  copy: src=web/git/profile dest=/srv/git/.profile owner=git group=srv
 
 - name: Install git-core package
   apt: name=git-core update_cache=yes

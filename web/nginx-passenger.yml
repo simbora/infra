@@ -16,7 +16,7 @@
     - passenger
 
 - name: Change Nginx user
-  lineinfile: regexp='^user' line='user deploy;'
+  lineinfile: regexp='^user' line='user deploy srv;'
     dest=/etc/nginx/nginx.conf
   notify: Restart Nginx
 

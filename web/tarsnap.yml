@@ -85,14 +85,14 @@
   command: make install chdir=/tmp/tarsnap-autoconf-{{ tarsnap_version }} creates=/usr/local/bin/tarsnap
 
 - name: Copy tarsnap configuration file
-  copy: src=web/tarsnap/tarsnaprc dest={{ item.dest }} owner={{ item.user }} group={{ item.user }}
+  copy: src=web/tarsnap/tarsnaprc dest={{ item.dest }} owner={{ item.owner }} group=srv
   with_items:
-    - { dest: "/srv/.tarsnaprc", user: "deploy" }
-    - { dest: "/srv/git/.tarsnaprc", user: "git" }
+    - { dest: "/srv/.tarsnaprc", owner: "deploy" }
+    - { dest: "/srv/git/.tarsnaprc", owner: "git" }
 
 - name: Create /srv/.tarsnap directory
-  file: path=/srv/.tarsnap owner=deploy group=deploy state=directory
+  file: path=/srv/.tarsnap owner=deploy group=srv state=directory
 
 - name: Copy tarsnap key file
-  copy: src=web/tarsnap/tarsnap.key dest=/srv/.tarsnap/tarsnap.key owner=deploy group=deploy
+  copy: src=web/tarsnap/tarsnap.key dest=/srv/.tarsnap/tarsnap.key owner=deploy group=srv
 

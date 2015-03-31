@@ -1,13 +1,16 @@
 ---
 
+- name: Create srv group
+  group: name=srv state=present
+
 - name: Create deploy user
-  user: name=deploy shell=/bin/bash home=/srv
+  user: name=deploy group=srv shell=/bin/bash home=/srv
 
 - name: Lock user deploy
   shell: usermod -L deploy
 
 - name: Create srv folder
-  file: path=/srv owner=deploy group=deploy state=directory
+  file: path=/srv owner=deploy group=srv state=directory
 
 - name: Set profile for deploy user
   copy: src=web/deploy/profile dest=/srv/.profile
