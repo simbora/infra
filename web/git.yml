@@ -13,7 +13,13 @@
   file: path=/srv/git/.ssh state=directory owner=git group=srv mode=700
 
 - name: Create git users authorized_keys
-  file: path=/srv/git/.ssh/authorized_keys state=touch owner=git group=srv mode=700
+  shell: >
+    cp /root/.ssh/authorized_keys authorized_keys &&
+    chown git:srv authorized_keys &&
+    chmod 600 authorized_keys
+  args:
+    chdir: /srv/git/.ssh
+    creates: /srv/git/.ssh/authorized_keys
 
 - name: Set profile environment for git user
   copy: src=web/git/profile dest=/srv/git/.profile owner=git group=srv
