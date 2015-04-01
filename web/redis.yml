@@ -7,7 +7,7 @@
     - redis-tools
 
 - name: Create new data folder for redis
-  file: path=/data/redis state=directory
+  file: path=/data/redis state=directory owner=redis group=redis
 
 - name: Configure redis to use /data/redis as data folder
   lineinfile: dest=/etc/redis/redis.conf
