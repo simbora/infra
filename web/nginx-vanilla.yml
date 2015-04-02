@@ -35,3 +35,6 @@
     insertafter='http {' line='        # Detect when HTTPS is used\n        map $scheme $fastcgi_https {\n            default off;\n            https on;\n        }'"
   when: '"Detect when HTTPS is used" not in nginx_conf_content.stdout'
   notify: Restart Nginx
+
+- name: Remove default entrypoint
+  file: path=/etc/nginx/sites-enabled/default state=absent
