@@ -7,27 +7,43 @@
   apt: name=python-mysqldb update_cache=yes
 
 - name: Configure mysql root user pass
-  mysql_user: name=root password="{{ mysql_root_passwd }}"
-  ignore_errors: yes
+  mysql_user: name=root password={{ mysql_root_passwd }}
 
-- name: Create /data/mysql folder
+- name: Create .my.cnf file with root password credentials
+  template: src=web/mysql/my.cnf dest=/root/.my.cnf owner=root group=root mode=0600
+  notify: Restart mysql
+
+- name: Change mysql data directory (1/5)
+  stat: path=/data/mysql
+  register: mysql_custom_directory
+
+- name: Change mysql data directory (2/5)
+  when: not mysql_custom_directory.stat.exists
   file: path=/data/mysql state=directory owner=mysql group=mysql
 
-- name: Change mysql data folder
-  lineinfile: dest=/etc/mysql/my.cnf line='datadir = /data/mysql'
-    regexp='^datadir'
-  notify: Move mysql data folder
+- name: Change mysql data directory (3/5)
+  when: not mysql_custom_directory.stat.exists
+  lineinfile: dest=/etc/mysql/my.cnf line='datadir = /data/mysql' regexp='^datadir'
+
+- name: Change mysql data directory (4/5)
+  when: not mysql_custom_directory.stat.exists
+  action: service name=mysql state=stopped
+
+- name: Change mysql data directory (5/5)
+  when: not mysql_custom_directory.stat.exists
+  command: mv /var/lib/mysql /data/
+  notify: Restart mysql
 
 - name: Test if apparmor exists
   stat: path=/etc/init.d/apparmor
   register: apparmor_installed
 
 - name: Fix apparmor configuration for mysql
+  when: apparmor_installed.stat.exists
   lineinfile:
     regexp='{{ item.apparmor }}' backrefs=yes line='{{ item.apparmor_line }}' dest=/etc/apparmor.d/usr.sbin.mysqld
   with_items:
     - { apparmor: '^  /var/lib/mysql/ r\,', apparmor_line: '  /data/mysql/ r,' }
     - { apparmor: '^  /var/lib/mysql/\*\* rwk\,', apparmor_line: '  /data/mysql/** rwk,' }
-
   notify: Restart apparmor service
-  when: apparmor_installed.stat.exists
+
