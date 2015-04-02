@@ -10,6 +10,7 @@
   remote_user: root
 
   vars_files:
+    - vars/mysql.yml
     - vars/tarsnap.yml
 
   tasks:
