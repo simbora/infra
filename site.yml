@@ -38,7 +38,7 @@
 
   handlers:
     - include: web/mysql-handlers.yml
-    - include: web/nginx-passenger-handlers.yml
+    - include: web/nginx-handlers.yml
     - include: web/php-fastcgi-handlers.yml
     - include: web/postfix-handlers.yml
     - include: web/postgresql-handlers.yml

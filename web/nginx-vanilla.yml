@@ -1,0 +1,37 @@
+---
+
+- name: Add Passenger apt repo key
+  apt_key: keyserver=keyserver.ubuntu.com id=561F9B9CAC40B2F7
+
+- name: Install Nginx packages
+  apt: name={{ item }} update_cache=yes
+  with_items:
+    - nginx-extras
+    - nginx
+
+- name: Change Nginx user
+  lineinfile: regexp='^user' line='user deploy srv;'
+    dest=/etc/nginx/nginx.conf
+  notify: Restart Nginx
+
+- name: Configure Nginx gzip
+  lineinfile: backup=yes state=present dest='/etc/nginx/nginx.conf'
+    regexp='{{ item.regexp }}' backrefs=yes line='{{ item.line }}'
+  with_items:
+    - { regexp: '# gzip_vary', line: '        gzip_vary on;' }
+    - { regexp: '# gzip_proxied', line: '        gzip_proxied any;' }
+    - { regexp: '# gzip_comp_level', line: '        gzip_comp_level 6;' }
+    - { regexp: '# gzip_buffers', line: '        gzip_buffers 16 8k;' }
+    - { regexp: '# gzip_http_version', line: '        gzip_http_version 1.1;' }
+    - { regexp: '# gzip_types', line: '        gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript;' }
+  notify: Restart Nginx
+
+- name: Check if Map variable for ssl connection exists
+  shell: cat /etc/nginx/nginx.conf
+  register: nginx_conf_content
+
+- name: Map variable for ssl conection
+  lineinfile: "backup=yes state=present dest=/etc/nginx/nginx.conf
+    insertafter='http {' line='        # Detect when HTTPS is used\n        map $scheme $fastcgi_https {\n            default off;\n            https on;\n        }'"
+  when: '"Detect when HTTPS is used" not in nginx_conf_content.stdout'
+  notify: Restart Nginx
