@@ -24,5 +24,4 @@
   with_items:
     - cgi
     - cli
-
-  notify: Restart php-fastcgi service
+  notify: Restart php5-fpm service

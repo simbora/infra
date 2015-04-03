@@ -1,0 +1,18 @@
+---
+
+- name: Install php5-fpm
+  apt: name=php5-fpm update_cache=yes
+
+- name: Configure php5-fpm for deploy:srv
+  lineinfile: dest=/etc/php5/fpm/pool.d/www.conf
+    "regexp={{ item.regexp }}" "line={{ item.line }}" backrefs=yes
+  with_items:
+    - { regexp: '^user =' , line: 'user = deploy' }
+    - { regexp: '^group =' , line: 'group = srv' }
+    - { regexp: '^listen.owner =' , line: 'listen.owner = deploy' }
+    - { regexp: '^listen.group =' , line: 'listen.group = srv' }
+    - { regexp: '^;listen.mode =' , line: 'listen.mode = 0660' }
+  notify: Restart php5-fpm service
+
+- name: Ensure that php5-fpm service is enabled and running
+  service: name=php5-fpm state=started enabled=yes

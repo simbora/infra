@@ -17,7 +17,6 @@
     - include: web/deploy.yml
     - include: web/git.yml
 
-    - include: web/fastcgi.yml
     - include: web/mysql.yml
     - include: web/nginx-passenger.yml
     - include: web/nodejs.yml
@@ -28,7 +27,7 @@
     - include: web/ruby.yml
     - include: web/tarsnap.yml
 
-    - include: web/php-fastcgi.yml
+    - include: web/php5-fpm.yml
     - include: web/php-pear.yml
     - include: web/postgresql-ruby.yml
     - include: web/rails.yml
@@ -39,7 +38,7 @@
   handlers:
     - include: web/mysql-handlers.yml
     - include: web/nginx-handlers.yml
-    - include: web/php-fastcgi-handlers.yml
+    - include: web/php5-fpm-handlers.yml
     - include: web/postfix-handlers.yml
     - include: web/postgresql-handlers.yml
     - include: web/redis-handlers.yml

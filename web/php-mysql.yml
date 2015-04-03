@@ -2,4 +2,4 @@
 
 - name: Install php5-mysql package
   apt: name=php5-mysql update_cache=yes
-  notify: Restart php-fastcgi service
+  notify: Restart php5-fpm service
