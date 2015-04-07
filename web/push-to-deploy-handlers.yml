@@ -1,0 +1,4 @@
+---
+
+- name: Restart push-to-deploy service
+  service: name=push-to-deploy state=restarted

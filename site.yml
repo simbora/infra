@@ -30,6 +30,7 @@
     - include: web/php5-fpm.yml
     - include: web/php-pear.yml
     - include: web/postgresql-ruby.yml
+    - include: web/push-to-deploy.yml
     - include: web/rails.yml
 
     - include: web/php-mysql.yml
