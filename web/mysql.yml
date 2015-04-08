@@ -47,3 +47,6 @@
     - { apparmor: '^  /var/lib/mysql/\*\* rwk\,', apparmor_line: '  /data/mysql/** rwk,' }
   notify: Restart apparmor service
 
+- name: Ensure that mysql is started and enabled on boot
+  service: name=mysql state=started enabled=yes
+
