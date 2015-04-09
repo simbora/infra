@@ -15,7 +15,7 @@
   with_items:
     - { regexp: '^#myorigin = /etc/mailname', line: 'myorigin = /etc/mailname' }
     - { regexp: '^myhostname', line: 'myhostname = {{ inventory_hostname }}' }
-    - { regexp: '^mydestination', line: 'mydestination = $myhostname, /etc/postfix/virtual/domains, localhost, localhost.localdomain, localhost' }
+    - { regexp: '^mydestination', line: 'mydestination = $myhostname, localhost, localhost.localdomain, localhost' }
   notify: Restart postfix
 
 - name: Remove lines from postfix
@@ -26,18 +26,24 @@
     - { regexp: '^alias_database' }
   notify: Reload postfix
 
-- name: Add virtual_alias_maps line
+- name: Add virtual_alias_maps line (1/5)
+  command: grep '^virtual_alias_maps =' /etc/postfix/main.cf
+  register: virtual_alias_maps_present
+
+- name: Add virtual_alias_maps line (2/5)
+  when: virtual_alias_maps_present|failed
   lineinfile: line='virtual_alias_maps = hash:/etc/postfix/virtual/addresses'
     dest=/etc/postfix/main.cf
-  notify: Reload postfix
 
-- name: Ensure that Postfix virtual folder exsists
+- name: Add virtual_alias_maps line (3/5)
+  when: virtual_alias_maps_present|failed
   file: path=/etc/postfix/virtual state=directory
 
-- name: Configure addresses for postfix
+- name: Add virtual_alias_maps line (4/5)
+  when: virtual_alias_maps_present|failed
   copy: src=web/postfix/addresses dest=/etc/postfix/virtual/addresses
-  notify: Postmap addresses
 
-- name: Configure domains for postfix
-  copy: src=web/postfix/domains dest=/etc/postfix/virtual/domains
+- name: Add virtual_alias_maps line (5/5)
+  when: virtual_alias_maps_present|failed
+  command: postmap /etc/postfix/virtual/addresses
   notify: Reload postfix
