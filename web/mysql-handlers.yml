@@ -6,4 +6,4 @@
 - name: Restart apparmor service
   service: name=mysql state=stopped
   service: name=apparmor state=restarted
-  notify: Start mysql service
+  notify: Restart mysql
