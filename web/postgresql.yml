@@ -9,6 +9,9 @@
 - name: Install PostgreSQL 9.3
   apt: name=postgresql-9.3 update_cache=yes
 
+- name: Install python-psycopg2 module required by Ansible
+  apt: name=python-psycopg2 update_cache=yes
+
 - name: Create PostgreSQL postgres cluster
   shell: pg_createcluster 9.3 postgres -d /data/postgres
   args:
