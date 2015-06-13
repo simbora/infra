@@ -12,3 +12,13 @@
 
 - name: Create directory for push-to-deploy configurations
   file: path=/etc/push-to-deploy.d state=directory
+
+- name: Set git config hooks.webhookurl "http://localhost:9000"
+  command: git config --global hooks.webhookurl "http://localhost:9000"
+  sudo: yes
+  sudo_user: git
+
+- name: Set git config meta.ownername "private"
+  command: git config --global meta.ownername "private"
+  sudo: yes
+  sudo_user: git
