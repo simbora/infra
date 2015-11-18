@@ -14,5 +14,10 @@
     regexp=^dir line='dir /data/redis' backrefs=yes
   notify: Restart redis
 
+- name: Configure redis persistence
+  lineinfile: dest=/etc/redis/redis.conf
+    regexp=^appendonly line='appendonly yes' backrefs=yes
+  notify: Restart redis
+
 - name: Enable redis server on start and ensure that is running
   service: name=redis-server state=started enabled=yes
