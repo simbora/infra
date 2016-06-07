@@ -23,7 +23,7 @@
     - { regexp: '# gzip_comp_level', line: '        gzip_comp_level 6;' }
     - { regexp: '# gzip_buffers', line: '        gzip_buffers 16 8k;' }
     - { regexp: '# gzip_http_version', line: '        gzip_http_version 1.1;' }
-    - { regexp: '# gzip_types', line: '        gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript;' }
+    - { regexp: '# gzip_types', line: '        gzip_types text/plain text/css application/json application/javascript application/x-javascript text/xml application/xml application/xml+rss text/javascript;' }
   notify: Restart Nginx
 
 - name: Check if Map variable for ssl connection exists
