@@ -7,11 +7,11 @@
   copy: src=web/push-to-deploy/push-to-deploy.conf
     dest=/etc/init/push-to-deploy.conf
 
-- name: Ensure that push-to-deploy service is enabled and running
-  service: name=push-to-deploy state=started enabled=yes
-
 - name: Create directory for push-to-deploy configurations
   file: path=/etc/push-to-deploy.d state=directory
+
+- name: Ensure that push-to-deploy service is enabled and running
+  service: name=push-to-deploy state=started enabled=yes
 
 - name: Set git config hooks.webhookurl "http://localhost:9000"
   command: git config --global hooks.webhookurl "http://localhost:9000"

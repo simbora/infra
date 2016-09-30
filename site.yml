@@ -43,4 +43,5 @@
     - include: web/php5-fpm-handlers.yml
     - include: web/postfix-handlers.yml
     - include: web/postgresql-handlers.yml
+    - include: web/push-to-deploy-handlers.yml
     - include: web/redis-handlers.yml
