@@ -8,3 +8,9 @@
 
 - name: Install notify-webhook dependencies (2/2)
   command: pip3 install simplejson creates=/usr/local/lib/python3.4/dist-packages/simplejson
+
+# python3-simplejson
+- name: Create notify-webhook.py
+  copy: src=web/notify-webhook/{{ item }} dest=/usr/local/bin/{{ item }} mode=755
+  with_items:
+    - notify-webhook.py

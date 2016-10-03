@@ -17,7 +17,7 @@
     - include: web/deploy.yml
     - include: web/git.yml
 
-    - include: web/git-post-receive-into-webhook-dependencies.yml
+    - include: web/git-post-receive-webhook.yml
     - include: web/mysql.yml
     - include: web/nginx-passenger.yml
     - include: web/nodejs.yml
