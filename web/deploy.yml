@@ -13,4 +13,4 @@
   file: path=/srv owner=deploy group=srv state=directory
 
 - name: Set profile for deploy user
-  copy: src=web/deploy/profile dest=/srv/.profile
+  copy: src=web/deploy/profile dest=/srv/.profile owner=deploy group=srv
