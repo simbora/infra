@@ -9,3 +9,42 @@
 - name: Create symbolic link for nodejs
   file: src=/usr/bin/nodejs dest=/usr/bin/node
     state=link
+
+- name: Install nvm for deploy user (1/4)
+  get_url:
+    url=https://raw.githubusercontent.com/creationix/nvm/v0.33.4/install.sh
+    dest="/tmp/nvm-install.sh"
+  register: nvm_downloaded
+  become: yes
+  become_user: deploy
+
+- name: Install nvm for deploy user (2/4)
+  when: nvm_downloaded
+  register: nvm_installed
+  shell: cat /tmp/nvm-install.sh | bash
+  args:
+    creates: ~/.nvm
+  become: yes
+  become_user: deploy
+
+- name: Install nvm for deploy user (3/4)
+  lineinfile:
+    dest=~/.profile
+    line="{{ item }}"
+  with_items:
+    - 'export NVM_DIR="$HOME/.nvm"'
+    - '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm'
+  become: yes
+  become_user: deploy
+
+- name: Install nvm for deploy user (4/4)
+  when: nvm_downloaded
+  register: nvm_installed
+  shell: >
+    . ~/.profile;
+    nvm install 8 &&
+    nvm alias default 8 &&
+    nvm use 8
+  become: yes
+  become_user: deploy
+
